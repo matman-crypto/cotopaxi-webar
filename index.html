@@ -17,6 +17,7 @@
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
   <style>
+
     html,
     body {
       margin: 0;
@@ -24,76 +25,116 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #000;
+
+      /* CAMBIO: fondo transparente */
+      background: transparent;
+
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    /* Pantalla inicial */
+
+    /* ---------------------------------------
+       PANTALLA INICIAL
+    --------------------------------------- */
+
     #start-screen {
+
       position: fixed;
       inset: 0;
+
       z-index: 9999;
 
       display: flex;
+
       flex-direction: column;
+
       justify-content: center;
+
       align-items: center;
 
       padding: 30px;
+
       box-sizing: border-box;
 
       text-align: center;
 
+      /* La pantalla inicial sí permanece negra */
       background: #000;
+
       color: white;
     }
 
+
     #start-screen h1 {
+
       margin: 0 0 15px 0;
+
       font-size: 30px;
+
       font-weight: 700;
     }
 
+
     #start-screen p {
+
       max-width: 400px;
+
       margin: 0 0 30px 0;
 
       font-size: 17px;
+
       line-height: 1.5;
+
       color: #ddd;
     }
 
+
     #start-button {
+
       border: none;
+
       border-radius: 12px;
 
       padding: 16px 30px;
 
       background: #ffc72c;
+
       color: #000;
 
       font-size: 18px;
+
       font-weight: bold;
 
       cursor: pointer;
+
       -webkit-tap-highlight-color: transparent;
     }
 
+
     #start-button:active {
+
       transform: scale(0.97);
     }
 
+
     #loading {
+
       display: none;
+
       margin-top: 20px;
+
       color: #fff;
+
       font-size: 15px;
     }
 
+
     #error-message {
+
       display: none;
 
       margin-top: 20px;
+
       max-width: 350px;
 
       padding: 15px;
@@ -101,20 +142,29 @@
       border-radius: 10px;
 
       background: rgba(255, 60, 60, 0.15);
+
       color: #ffb3b3;
 
       font-size: 14px;
+
       line-height: 1.4;
     }
 
-    /* Mensaje cuando encuentra la tarjeta */
+
+    /* ---------------------------------------
+       MENSAJE CUANDO ENCUENTRA LA TARJETA
+    --------------------------------------- */
+
     #found-message {
+
       display: none;
 
       position: fixed;
+
       z-index: 5000;
 
       left: 50%;
+
       bottom: 30px;
 
       transform: translateX(-50%);
@@ -124,83 +174,184 @@
       border-radius: 25px;
 
       background: rgba(0, 0, 0, 0.75);
+
       color: white;
 
       font-size: 15px;
 
+      font-weight: 600;
+
+      white-space: nowrap;
+
       pointer-events: none;
     }
 
-    /* Evita que A-Frame muestre controles innecesarios */
+
+    /* ---------------------------------------
+       A-FRAME
+    --------------------------------------- */
+
     .a-enter-vr {
+
       display: none !important;
     }
+
+
+    /* ---------------------------------------
+       ESCENA TRANSPARENTE
+    --------------------------------------- */
+
+    a-scene {
+
+      background: transparent !important;
+    }
+
+
+    /* ---------------------------------------
+       CANVAS TRANSPARENTE
+    --------------------------------------- */
+
+    canvas {
+
+      background: transparent !important;
+    }
+
+
+    /* ---------------------------------------
+       VIDEO DE LA CÁMARA DE MINDAR
+    --------------------------------------- */
+
+    video[autoplay] {
+
+      position: fixed !important;
+
+      top: 0 !important;
+
+      left: 0 !important;
+
+      width: 100% !important;
+
+      height: 100% !important;
+
+      object-fit: cover !important;
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <!-- Pantalla para activar la cámara -->
+
+  <!-- =====================================
+       PANTALLA PARA ACTIVAR LA CÁMARA
+  ====================================== -->
+
   <div id="start-screen">
 
-    <h1>Descubre el Cotopaxi</h1>
+    <h1>
+      Descubre el Cotopaxi
+    </h1>
+
 
     <p>
       Apunta la cámara hacia la tarjeta del Cotopaxi
       para descubrir la experiencia.
     </p>
 
+
     <button id="start-button">
       ACTIVAR CÁMARA
     </button>
+
 
     <div id="loading">
       Activando cámara...
     </div>
 
+
     <div id="error-message"></div>
 
   </div>
 
-  <!-- Mensaje cuando encuentra la imagen -->
+
+
+  <!-- =====================================
+       MENSAJE DE EXPERIENCIA
+  ====================================== -->
+
   <div id="found-message">
+
     🇪🇨 ECUADOR - Brilla auténticamente ✨
+
   </div>
 
 
-  <!-- EXPERIENCIA WEBAR -->
+
+  <!-- =====================================
+       EXPERIENCIA WEBAR
+  ====================================== -->
+
   <a-scene
+
     id="ar-scene"
 
+
     mindar-image="
+
       imageTargetSrc: ./targets.mind;
+
       autoStart: false;
+
       uiScanning: yes;
+
       uiLoading: no;
+
       filterMinCF: 0.0001;
+
       filterBeta: 0.001;
+
     "
+
 
     color-space="sRGB"
 
+
     renderer="
+
       colorManagement: true;
+
       physicallyCorrectLights: true;
+
+      alpha: true;
+
     "
+
 
     vr-mode-ui="enabled: false"
 
+
     device-orientation-permission-ui="enabled: false"
+
 
     embedded
 
+
     loading-screen="enabled: false"
+
   >
 
-    <!-- VIDEO -->
+
+
+    <!-- =====================================
+         VIDEO
+    ====================================== -->
+
     <a-assets>
 
       <video
+
         id="cotopaxi-video"
 
         src="./cotopaxi-demo.mp4"
@@ -208,24 +359,38 @@
         preload="auto"
 
         loop
+
         muted
+
         playsinline
+
         webkit-playsinline
 
         crossorigin="anonymous"
+
       ></video>
 
     </a-assets>
 
 
-    <!-- TARGET -->
+
+    <!-- =====================================
+         TARGET
+    ====================================== -->
+
     <a-entity
+
       id="target"
+
       mindar-image-target="targetIndex: 0"
+
     >
 
+
       <!-- VIDEO SOBRE LA TARJETA -->
+
       <a-video
+
         id="ar-video"
 
         src="#cotopaxi-video"
@@ -235,44 +400,102 @@
         rotation="0 0 0"
 
         width="1"
+
         height="0.648"
 
         material="
+
           shader: flat;
+
           transparent: false;
+
         "
-      >
-      </a-video>
+
+      ></a-video>
+
 
     </a-entity>
 
 
-    <!-- CÁMARA -->
+
+    <!-- =====================================
+         CÁMARA
+    ====================================== -->
+
     <a-camera
+
       position="0 0 0"
+
       look-controls="enabled: false"
+
       cursor="fuse: false"
-    >
-    </a-camera>
+
+    ></a-camera>
+
+
 
   </a-scene>
 
 
+
+  <!-- =====================================
+       JAVASCRIPT
+  ====================================== -->
+
   <script>
+
 
     // ---------------------------------------
     // ELEMENTOS
     // ---------------------------------------
 
-    const startScreen = document.getElementById("start-screen");
-    const startButton = document.getElementById("start-button");
-    const loading = document.getElementById("loading");
-    const errorMessage = document.getElementById("error-message");
-    const foundMessage = document.getElementById("found-message");
+    const startScreen =
+      document.getElementById(
+        "start-screen"
+      );
 
-    const scene = document.getElementById("ar-scene");
-    const target = document.getElementById("target");
-    const video = document.getElementById("cotopaxi-video");
+
+    const startButton =
+      document.getElementById(
+        "start-button"
+      );
+
+
+    const loading =
+      document.getElementById(
+        "loading"
+      );
+
+
+    const errorMessage =
+      document.getElementById(
+        "error-message"
+      );
+
+
+    const foundMessage =
+      document.getElementById(
+        "found-message"
+      );
+
+
+    const scene =
+      document.getElementById(
+        "ar-scene"
+      );
+
+
+    const target =
+      document.getElementById(
+        "target"
+      );
+
+
+    const video =
+      document.getElementById(
+        "cotopaxi-video"
+      );
+
 
 
     // ---------------------------------------
@@ -280,196 +503,360 @@
     // ---------------------------------------
 
     video.muted = true;
+
     video.loop = true;
+
     video.playsInline = true;
 
-    // No reproducir hasta encontrar la tarjeta
+
+    // No reproducir hasta encontrar
+    // la tarjeta
+
     video.pause();
+
 
 
     // ---------------------------------------
     // ACTIVAR CÁMARA
     // ---------------------------------------
 
-    startButton.addEventListener("click", async function () {
+    startButton.addEventListener(
 
-      console.log("Botón ACTIVAR CÁMARA presionado");
+      "click",
 
-      startButton.style.display = "none";
-
-      loading.style.display = "block";
-
-      errorMessage.style.display = "none";
+      async function () {
 
 
-      try {
+        console.log(
+          "Botón ACTIVAR CÁMARA presionado"
+        );
 
-        // -----------------------------------
-        // Comprobar navegador
-        // -----------------------------------
 
-        if (!navigator.mediaDevices ||
-            !navigator.mediaDevices.getUserMedia) {
+        startButton.style.display =
+          "none";
 
-          throw new Error(
-            "Este navegador no permite acceder a la cámara."
+
+        loading.style.display =
+          "block";
+
+
+        errorMessage.style.display =
+          "none";
+
+
+
+        try {
+
+
+          // -----------------------------------
+          // COMPROBAR NAVEGADOR
+          // -----------------------------------
+
+          if (
+
+            !navigator.mediaDevices ||
+
+            !navigator.mediaDevices
+              .getUserMedia
+
+          ) {
+
+
+            throw new Error(
+
+              "Este navegador no permite acceder a la cámara."
+
+            );
+
+          }
+
+
+
+          // -----------------------------------
+          // SOLICITAR PERMISO
+          // -----------------------------------
+
+          console.log(
+            "Solicitando permiso de cámara..."
           );
 
-        }
+
+          const stream =
+
+            await navigator.mediaDevices
+              .getUserMedia({
+
+                video: {
+
+                  facingMode: {
+
+                    ideal: "environment"
+
+                  }
+
+                },
+
+                audio: false
+
+              });
 
 
-        // -----------------------------------
-        // SOLICITAR PERMISO DE CÁMARA
-        // -----------------------------------
 
-        console.log("Solicitando permiso de cámara...");
+          console.log(
+            "Permiso de cámara concedido"
+          );
 
-        const stream =
-          await navigator.mediaDevices.getUserMedia({
-            video: {
-              facingMode: {
-                ideal: "environment"
+
+
+          // -----------------------------------
+          // CERRAR STREAM TEMPORAL
+          // -----------------------------------
+
+          stream
+            .getTracks()
+            .forEach(
+
+              function(track) {
+
+                track.stop();
+
               }
-            },
-            audio: false
-          });
+
+            );
 
 
-        console.log("Permiso de cámara concedido");
+
+          // -----------------------------------
+          // OBTENER SISTEMA MINDAR
+          // -----------------------------------
+
+          const mindarSystem =
+
+            scene.systems[
+              "mindar-image-system"
+            ];
 
 
-        // Cerramos el stream temporal.
-        // MindAR abrirá su propia cámara.
-        stream.getTracks().forEach(function(track) {
-          track.stop();
-        });
+
+          if (!mindarSystem) {
 
 
-        // -----------------------------------
-        // OBTENER SISTEMA MINDAR
-        // -----------------------------------
+            throw new Error(
 
-        const mindarSystem =
-          scene.systems["mindar-image-system"];
+              "No se pudo iniciar el sistema de realidad aumentada."
+
+            );
+
+          }
 
 
-        if (!mindarSystem) {
 
-          throw new Error(
-            "No se pudo iniciar el sistema de realidad aumentada."
+          console.log(
+            "Iniciando MindAR..."
           );
+
+
+
+          // -----------------------------------
+          // INICIAR MINDAR
+          // -----------------------------------
+
+          await mindarSystem.start();
+
+
+
+          console.log(
+            "MindAR iniciado correctamente"
+          );
+
+
+
+          // -----------------------------------
+          // OCULTAR PANTALLA INICIAL
+          // -----------------------------------
+
+          startScreen.style.display =
+            "none";
+
+
+          loading.style.display =
+            "none";
+
 
         }
 
 
-        console.log("Iniciando MindAR...");
+        catch (error) {
 
 
-        // -----------------------------------
-        // INICIAR MINDAR
-        // -----------------------------------
-
-        await mindarSystem.start();
-
-
-        console.log("MindAR iniciado correctamente");
+          console.error(
+            "ERROR DE CÁMARA:",
+            error
+          );
 
 
-        // -----------------------------------
-        // OCULTAR PANTALLA INICIAL
-        // -----------------------------------
-
-        startScreen.style.display = "none";
-
-        loading.style.display = "none";
+          loading.style.display =
+            "none";
 
 
-      } catch (error) {
+          startButton.style.display =
+            "block";
 
-        console.error("ERROR DE CÁMARA:", error);
 
-        loading.style.display = "none";
+          errorMessage.style.display =
+            "block";
 
-        startButton.style.display = "block";
 
-        errorMessage.style.display = "block";
 
-        errorMessage.innerHTML =
-          "No pudimos activar la cámara.<br><br>" +
-          "<strong>Permite el acceso a la cámara</strong> " +
-          "cuando el navegador lo solicite y vuelve a intentarlo.<br><br>" +
-          "Error: " +
-          error.message;
+          errorMessage.innerHTML =
+
+            "No pudimos activar la cámara.<br><br>" +
+
+            "<strong>Permite el acceso a la cámara</strong> " +
+
+            "cuando el navegador lo solicite y vuelve a intentarlo." +
+
+            "<br><br>" +
+
+            "Error: " +
+
+            error.message;
+
+        }
 
       }
 
-    });
+    );
+
 
 
     // ---------------------------------------
     // CUANDO SE ENCUENTRA LA TARJETA
     // ---------------------------------------
 
-    target.addEventListener("targetFound", function () {
+    target.addEventListener(
 
-      console.log("TARGET ENCONTRADO");
+      "targetFound",
 
-      foundMessage.style.display = "block";
+      function () {
 
-
-      // Reproducir video
-      video.play().catch(function(error) {
 
         console.log(
-          "El navegador bloqueó la reproducción automática:",
-          error
+          "TARGET ENCONTRADO"
         );
 
-      });
 
-    });
+        // Mostrar mensaje
+
+        foundMessage.style.display =
+          "block";
+
+
+
+        // Reproducir video
+
+        video
+          .play()
+          .catch(
+
+            function(error) {
+
+
+              console.log(
+
+                "El navegador bloqueó " +
+                "la reproducción automática:",
+
+                error
+
+              );
+
+            }
+
+          );
+
+      }
+
+    );
+
 
 
     // ---------------------------------------
     // CUANDO SE PIERDE LA TARJETA
     // ---------------------------------------
 
-    target.addEventListener("targetLost", function () {
+    target.addEventListener(
 
-      console.log("TARGET PERDIDO");
+      "targetLost",
 
-      foundMessage.style.display = "none";
+      function () {
 
-      video.pause();
 
-    });
+        console.log(
+          "TARGET PERDIDO"
+        );
+
+
+        foundMessage.style.display =
+          "none";
+
+
+        video.pause();
+
+      }
+
+    );
+
 
 
     // ---------------------------------------
-    // CUANDO LA ESCENA ESTÁ LISTA
+    // ESCENA CARGADA
     // ---------------------------------------
 
-    scene.addEventListener("loaded", function () {
+    scene.addEventListener(
 
-      console.log("Escena A-Frame cargada");
+      "loaded",
 
-    });
+      function () {
+
+
+        console.log(
+          "A-Frame cargado"
+        );
+
+      }
+
+    );
+
 
 
     // ---------------------------------------
-    // ERRORES DE A-FRAME
+    // ERRORES GENERALES
     // ---------------------------------------
 
-    window.addEventListener("error", function (event) {
+    window.addEventListener(
 
-      console.error(
-        "Error general:",
-        event.error || event.message
-      );
+      "error",
 
-    });
+      function(event) {
+
+
+        console.error(
+
+          "Error general:",
+
+          event.error ||
+          event.message
+
+        );
+
+      }
+
+    );
+
 
   </script>
+
 
 </body>
 </html>
